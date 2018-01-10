@@ -1,0 +1,101 @@
+open List
+open Stream
+open Genlex
+open Printf
+open Str
+open Parsing
+open Hashtbl
+open Set
+
+
+type t
+type v
+type tokens =
+| T of t
+| V of v
+
+
+module V_ord =
+    struct
+    type t = v
+    let compare  = Pervasives.compare
+  end
+
+  module T_ord =
+      struct
+      type t
+      let compare  = Pervasives.compare
+    end
+
+module ConjuntoSetV = Set.Make(V_ord)
+module ConjuntoSetT = Set.Make(T_ord)
+
+
+module NODE =
+  struct
+
+
+  end
+
+let lasttknid = ref 0 ;;
+
+let cycleElimination = true;;
+
+let inc () =
+   lasttknid:= !lasttknid + 1;
+   !lasttknid;;
+
+
+
+let nexttokenid () =
+   inc();;
+ (*printf "Ocaml hellow\n" ;*)
+ (*printf "%d \n" !lasttknid;;*)
+
+let varToNode = Hashtbl.create 100;;
+let tokenToInt = Hashtbl.create 100;;
+
+varToNode
+
+let getTokenInt (t1:t) =
+ try
+  Hashtbl.find tokenToInt t1;
+ with Not_found ->
+	begin
+	  Hashtbl.add tokenToInt t1 (nexttokenid () );nexttokenid ()
+	end
+
+
+let getOrPutNode (valor:v) =
+try
+  Hashtbl.find varToNode valor;
+ with Not_found ->
+	begin
+	  Hashtbl.add varToNode valor ("Novo nodo");"Novo nodo";
+	end;;
+
+let detechPath (from,too) = "Descobrindo ciclo";;
+let collapseCycle (x) = "Elimando ciclo";;
+let sucessorrecebey (nx,y) = "nx recebe y";;
+let addAndPropagateBits (s,x) = "Propagate";;
+
+let addConstantConstraint (t,x) =
+  let bs = ConjuntoSetT.empty in
+   let newbs = ConjuntoSetT.add t bs in
+   addAndPropagateBits(bs,x);;
+
+let addSubsetConstraint (x,y) =
+  let nx = getOrPutNode(x) in
+  let ny = getOrPutNode(y) in
+     if (nx != ny) then
+        (
+        ignore (sucessorrecebey (nx,y));
+        ignore (addAndPropagateBits("Solução do node nx",y));
+        if(cycleElimination)then
+          collapseCycle("detechPath(ny,nx)")
+        else
+            assert false
+        )
+    else
+      assert false
+        ;;

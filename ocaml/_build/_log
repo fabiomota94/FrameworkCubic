@@ -1,0 +1,12 @@
+### Starting build.
+# Target: exemploA.ml.depends, tags: { extension:ml, file:exemploA.ml, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -modules exemploA.ml > exemploA.ml.depends
+# Target: Framework_Cubica.ml.depends, tags: { extension:ml, file:Framework_Cubica.ml, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -modules Framework_Cubica.ml > Framework_Cubica.ml.depends # cached
+# Target: Framework_Cubica.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Framework_Cubica.cmo, file:Framework_Cubica.ml, implem, ocaml, quiet }
+ocamlfind ocamlc -c -o Framework_Cubica.cmo Framework_Cubica.ml # cached
+# Target: exemploA.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:exemploA.cmo, file:exemploA.ml, implem, ocaml, quiet }
+ocamlfind ocamlc -c -o exemploA.cmo exemploA.ml
+# Target: exemploA.byte, tags: { byte, dont_link_with, extension:byte, file:exemploA.byte, link, ocaml, program, quiet }
+ocamlfind ocamlc -linkpkg Framework_Cubica.cmo exemploA.cmo -o exemploA.byte
+# Compilation successful.
